@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 
-
 app = FastAPI(
     title="Bet-maker",
 )
@@ -8,6 +7,4 @@ app = FastAPI(
 
 @app.get("/health")
 async def check_health():
-    return {
-        "ok": True
-    }
+    return {"ok": True}

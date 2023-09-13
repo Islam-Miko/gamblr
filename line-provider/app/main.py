@@ -1,13 +1,12 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
-from fastapi import FastAPI
+
 import redis.asyncio as aioredis
+from fastapi import FastAPI
+
 from . import redis
-from .settings import get_settings
 from .routes import router
-
-
-
+from .settings import get_settings
 
 settings = get_settings()
 
@@ -21,8 +20,7 @@ async def lifespan(app_: FastAPI) -> AsyncGenerator:
     yield
     await pool.disconnect()
 
-app = FastAPI(
-    title="Line-provider", lifespan=lifespan
-)
+
+app = FastAPI(title="Line-provider", lifespan=lifespan)
 
 app.include_router(router)

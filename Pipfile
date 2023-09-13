@@ -11,6 +11,7 @@ uvicorn = {extras = ["standard"], version = "*"}
 pydantic-settings = "*"
 
 [dev-packages]
+pre-commit = "*"
 
 [requires]
 python_version = "3.10"
