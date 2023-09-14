@@ -27,3 +27,4 @@ uvicorn[standard]==0.23.2; python_version >= '3.8'
 uvloop==0.17.0
 watchfiles==0.20.0
 websockets==11.0.3
+loguru==0.7.2; python_version >= '3.5'

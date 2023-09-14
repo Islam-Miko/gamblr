@@ -1,20 +1,24 @@
 from fastapi import APIRouter, Depends, status
 
-from .dependencies import check_bet_exists
-from .schemas import BetsCreateSchema
+from .dependencies import check_event_exists
+from .schemas import (
+    BetCreateSchema,
+    BetPaginationResponse,
+    EventPaginationResponse,
+)
 from .services import BetService, EventService
 
 router = APIRouter()
 
 
-@router.get("/events")
+@router.get("/events", response_model=EventPaginationResponse)
 async def get_active_events(
     limit: int = 20, offset: int = 0, service: EventService = Depends()
 ):
     return await service.list(limit, offset)
 
 
-@router.get("/bets")
+@router.get("/bets", response_model=BetPaginationResponse)
 async def get_bets(
     limit: int = 20, offset: int = 0, service: BetService = Depends()
 ):
@@ -23,7 +27,7 @@ async def get_bets(
 
 @router.post("/bet", status_code=status.HTTP_201_CREATED)
 async def make_bet(
-    bet: BetsCreateSchema = Depends(check_bet_exists),
+    bet: BetCreateSchema = Depends(check_event_exists),
     service: BetService = Depends(),
 ):
     id_ = await service.create(bet)

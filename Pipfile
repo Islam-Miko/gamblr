@@ -12,6 +12,7 @@ pydantic-settings = "*"
 asyncpg = "*"
 sqlalchemy = "*"
 alembic = "*"
+loguru = "*"
 
 [dev-packages]
 pre-commit = "*"

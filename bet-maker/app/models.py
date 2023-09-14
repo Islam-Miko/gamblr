@@ -15,7 +15,7 @@ class Event(Base):
         BigInteger, primary_key=True, autoincrement=False
     )
     coefficient: Mapped[decimal.Decimal] = mapped_column(
-        Numeric(precision=2, asdecimal=True),
+        Numeric(precision=5, scale=2, asdecimal=True),
     )
     deadline: Mapped[int] = mapped_column(BigInteger)
     state: Mapped[int] = mapped_column(SmallInteger)
@@ -29,5 +29,5 @@ class Bet(Base):
         BigInteger, ForeignKey("event.event_id"), index=True
     )
     bid: Mapped[decimal.Decimal] = mapped_column(
-        Numeric(precision=2, asdecimal=True)
+        Numeric(precision=5, scale=2, asdecimal=True)
     )

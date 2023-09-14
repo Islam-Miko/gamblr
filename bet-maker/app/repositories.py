@@ -26,14 +26,14 @@ class BaseRepository(Generic[Model]):
 
     async def list(
         self,
-        offset: int,
         limit: int,
+        offset: int,
     ):
         stmt = self.select_stmt
         result: Result = await self.session.execute(
             self.select_stmt.limit(limit).offset(offset)
         )
-        return result.scalars().all(), stmt
+        return result.all(), stmt
 
     async def count(self, stmt: Select) -> int:
         stmt = select(func.count()).select_from(stmt.limit(None).offset(None))
@@ -73,7 +73,12 @@ class EventRepository(BaseRepository[Event]):
         result: Result = await self.session.execute(
             stmt.limit(limit).offset(offset)
         )
-        return result.scalars().all(), stmt
+        return result.all(), stmt
+
+    async def exists_id(self, id: Key) -> bool:
+        stmt = sql_exists(Event).where(Event.event_id == id).select()
+        result: Result = await self.session.execute(stmt)
+        return result.scalar_one()
 
 
 class BetRepository(BaseRepository[Bet]):
@@ -91,11 +96,6 @@ class BetRepository(BaseRepository[Bet]):
     async def update(self, id: Key, data: Mapping) -> None:
         stmt = update(self.model).where(self.model.bet_id == id).values(**data)
         await self.session.execute(stmt)
-
-    async def exists_id(self, id: Key) -> bool:
-        stmt = sql_exists(Bet).where(Bet.bet_id == id).select()
-        result: Result = await self.session.execute(stmt)
-        return result.scalar_one()
 
 
 def get_event_repository(

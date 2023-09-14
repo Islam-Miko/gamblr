@@ -22,6 +22,21 @@ class BetSchema(BaseSchema):
     state: int
 
 
-class BetsCreateSchema(BaseSchema):
-    bet_id: int
-    bid: decimal.Decimal = Field(..., gt=0, decimal_places=2)
+class BetCreateSchema(BaseSchema):
+    event_id: int
+    bid: decimal.Decimal = Field(..., gt=0, decimal_places=2, le=1000)
+
+
+class PaginationResponse(BaseSchema):
+    count: int
+    limit: int
+    data: list
+    offset: int
+
+
+class EventPaginationResponse(PaginationResponse):
+    data: list[EventSchema]
+
+
+class BetPaginationResponse(PaginationResponse):
+    data: list[BetSchema]
