@@ -3,9 +3,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends\
     xz-utils
 WORKDIR /app
-COPY ../Pipfile ../Pipfile.lock ./
+COPY requirements.txt req.txt
 RUN python -m venv --copies /venv
-RUN . /venv/bin/activate && pip install pipenv && pipenv install --deploy
+RUN . /venv/bin/activate && pip install -r req.txt
 
 FROM python:3.10.12-slim-buster as prod
 WORKDIR /app

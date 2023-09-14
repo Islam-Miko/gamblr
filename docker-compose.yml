@@ -3,9 +3,9 @@ services:
   bet-maker:
     container_name: bet-maker
     build:
-      context: .
-      dockerfile: bet-maker/Dockerfile
-    command: uvicorn bet-maker.main:app --host 0.0.0.0 --port 8000
+      context: ./bet-maker
+      dockerfile: Dockerfile
+    command: bash start-api.sh
     ports:
       - 8001:8000
     depends_on:
@@ -25,9 +25,9 @@ services:
   line-provider:
     container_name: line-provider
     build:
-      context: .
-      dockerfile: line-provider/Dockerfile
-    command: uvicorn line-provider.app.main:app --host 0.0.0.0 --port 8000
+      context: ./line-provider
+      dockerfile: Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     ports:
       - 8002:8000
     depends_on:
@@ -41,9 +41,9 @@ services:
       volumes:
         - gamblr-db:/var/lib/postgresql/data/
       environment:
-        POSTGRES_USER: "${POSTGRES_USER}"
-        POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-        POSTGRES_DB: "${POSTGRES_DB}"
+        - POSTGRES_USER=${DATABASE_USER}
+        - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+        - POSTGRES_DB=${DATABASE_DB}
       expose:
         - "5432"
 

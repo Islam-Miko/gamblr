@@ -9,6 +9,9 @@ redis = "*"
 pydantic = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 pydantic-settings = "*"
+asyncpg = "*"
+sqlalchemy = "*"
+alembic = "*"
 
 [dev-packages]
 pre-commit = "*"
