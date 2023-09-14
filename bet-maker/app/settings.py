@@ -21,8 +21,11 @@ class Settings(BaseSettings):
 
     @property
     def POSTGRES_DSN(self) -> PostgresDsn:
-        return f"{self.DATABASE_DRIVER}://{self.DATABASE_USER}:\
-            {self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_DB}"
+        return (
+            f"{self.DATABASE_DRIVER}://{self.DATABASE_USER}:"
+            f"{self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:"
+            f"{self.DATABASE_PORT}/{self.DATABASE_DB}"
+        )
 
 
 @cache
