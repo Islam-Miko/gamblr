@@ -24,7 +24,7 @@ class BetSchema(BaseSchema):
 
 class BetCreateSchema(BaseSchema):
     event_id: int
-    bid: decimal.Decimal = Field(..., gt=0, decimal_places=2, le=1000)
+    bid: decimal.Decimal = Field(..., gt=0, decimal_places=2, lt=1000)
 
 
 class PaginationResponse(BaseSchema):

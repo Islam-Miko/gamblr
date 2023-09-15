@@ -21,8 +21,9 @@ class EventListener:
 
     async def stop_listening(self) -> None:
         logger.info("Canceling listener tasks")
-        cancel_tasks = [task.cancel() for task in self.__tasks]
-        await asyncio.gather(cancel_tasks)
+        for task in self.__tasks:
+            task.cancel("Gracefully canceled!")
+        await asyncio.sleep(3)
         logger.info("Gracefully canceled coros")
 
 
