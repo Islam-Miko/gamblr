@@ -1,22 +1,26 @@
 import asyncio
+from typing import Final
 
 from loguru import logger
 from pydantic import ValidationError
 
 from .database import SessionFactory
-from .redis import fetch_new_events, fetch_states
+from .redis import fetch_queue_data
 from .services import EventService
+
+NEW_EVENT_QUEUE: Final[str] = "new_events"
+STATE_UPDATE_QUEUE: Final[str] = "finished_events"
 
 
 async def listen_new_events() -> None:
     """
-    Coroutine fetches state change events from
+    Coroutine fetches new events from
     Redis queue.
     When events are fetched, they are stored in DB.
     """
     try:
         while True:
-            new_events = await fetch_new_events()
+            new_events = await fetch_queue_data(NEW_EVENT_QUEUE)
             async with SessionFactory() as session:
                 service = EventService.with_session(session)
                 for event in new_events:
@@ -35,13 +39,13 @@ async def listen_new_events() -> None:
 
 async def listen_state_update() -> None:
     """
-    Coroutine fetches state change events from
+    Coroutine fetches `state change` events from
     Redis queue.
-    When events are fetched, they are stored in DB.
+    When events are fetched, their data are stored in DB.
     """
     try:
         while True:
-            states = await fetch_states()
+            states = await fetch_queue_data(STATE_UPDATE_QUEUE)
             async with SessionFactory() as session:
                 service = EventService.with_session(session)
                 for state in states:
